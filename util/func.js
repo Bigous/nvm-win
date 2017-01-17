@@ -203,13 +203,13 @@ function install(version,cb){
 }
 
 function getLatest(cb){
-    request('https://nodejs.org',function(e,res,body){
+    request('https://nodejs.org/dist/latest/',function(e,res,body){
         if(e) return cb(e);
         if(res.statusCode !== 200){
-            return cb(new Error('the statusCode of request https://nodejs.org is ' + res.statusCode + ',please check the Internet environment'));
+            return cb(new Error('the statusCode of request https://nodejs.org/dist/latest/ is ' + res.statusCode + ',please check the Internet environment'));
         }
         // get latest version from https://nodejs.org
-        var matches = body.match(/Current Version:\sv([0-9\.]+)/m);
+        var matches = body.match(/node-v([0-9\.]+).tar.xz/m);
         if(matches && matches.length > 1){
             fs.exists(getVersionPath(matches[1]),function(exists){
                 if(exists){
@@ -218,7 +218,7 @@ function getLatest(cb){
                 cb(null,matches[1]);
             });
         }else{
-            cb(new Error('can\'t find the latest version from https://nodejs.org , please check it by yourself.'));
+            cb(new Error('can\'t find the latest version from https://nodejs.org/dist/latest/ , please check it by yourself.'));
         }
 
     });
